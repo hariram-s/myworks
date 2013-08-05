@@ -1,0 +1,25 @@
+<?php 
+require_once 'bootstrap.php';
+require_once 'includes/common.inc';
+require_once 'includes/bill-management-lib.inc';
+if(isset($_GET['confirm'])) {
+	switch ($_GET['confirm']) {
+  case 'y':
+		disable_customer($ids);
+		redirect('list-customers.php');
+    break;
+  case 'n':
+		redirect('list-customers.php');
+    break;
+  case 'yes':
+		enable_customer($ids);
+		redirect('list-customers.php');
+    break;
+  case 'no':
+		redirect('list-customers.php');
+    break;
+}
+}
+
+?>
+

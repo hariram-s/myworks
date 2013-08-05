@@ -1,0 +1,19 @@
+<?php
+require_once 'bootstrap.php';
+require_once 'includes/common.inc';
+require_once 'includes/bill-management-lib.inc';
+$header = array ('Code', 'Name' , 'Quantity', 'Selling price', 'customer id', 'user id', 'total'); 
+$list = view_bill($_SESSION['billid']);
+$list_user = new Savant3();
+$list_user->title = 'List users';
+//$list_user->links = get_menu();
+foreach ($list as $index => $entry)  {
+  $link = "<a href='cancel-bill.php?q={$entry['billno']}'>Edit</a>";
+  $list[$index][] = $link;
+} 
+$rows = $list;
+$list_user->inputs = list_users_form($header,$rows); 
+$list_user->display('templates/content.tpl.php');
+include 'footer.php';
+?>
+

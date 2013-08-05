@@ -1,0 +1,24 @@
+<?php 
+require_once 'bootstrap.php';
+require_once 'includes/common.inc';
+require_once 'includes/user-management-lib.inc';
+if (authorize('disable_user')) {
+  $names = array();
+  if(isset($_POST['names'])) { 
+    foreach( $_POST['names'] as $index => $name) {
+      $names[] = "$index";
+    }
+  }
+  if($_POST['submit']=='Disable') {
+    disable_users($names);
+    redirect('list-users.php');
+  }
+  if($_POST['submit']=='Enable') {
+    enable_users($names);
+    redirect('disabled-users.php');
+  }
+}
+else {
+  redirect ('access-denied.php');
+}
+?>

@@ -1,0 +1,40 @@
+<?php
+require_once 'bootstrap.php';
+require_once 'includes/common.inc';
+require_once 'includes/report-management-lib.inc';
+if (authorize('report_customer')) {
+$date =date("Y-m-d");
+$report_customer = new Savant3();
+$report_customer->title = 'Report by customer';
+$report_customer->main_links = get_menu('main_menu');
+$report_customer->links = get_menu('reports');
+$report_customer->inputs = report_customer_form($date);  
+$report_customer->display('templates/content.tpl.php');
+if(isset ($_POST['reportcustomer'])) {
+  if (!empty($_POST['start']) 
+    && !empty($_POST['end'])
+    ) {
+    $starting = strtotime ($_POST['start']);
+    $ending = strtotime ($_POST['end']);
+    if ($starting <= $ending) { 
+      $report = report_customer_submit(($starting),($ending)) ;
+      $header = array('Customer-Name','Total-Amount');
+      $reports = new Savant3();
+      $reports->header = $header; 
+      $reports->rows = $report ; 
+      $reports->display('templates/list.tpl.php');
+    }
+    else {
+      echo " Please enter a valid date";
+    }
+  }
+  else {
+   echo "please fill the required fields";
+  }
+}
+}
+else {
+  redirect('access-denied.php');
+}
+?>
+

@@ -1,0 +1,49 @@
+<?php
+/**
+ * user interface functions for install.php
+ */
+
+
+/**
+ * Functions to display the form.
+ */
+function enter_database_form() {
+  $database_str ="";
+	$database_str .= "<form method='POST' action='install.php' >";
+	$database_str .= "  <div><label>Enter the database name</label><input type='text' name='dbname'/></div>";
+	$database_str .= "  <div><label>Enter the database user name</label><input type='text' name='dbusername'/></div>";
+	$database_str .= "  <div><label>password</label><input type='password' name='db_password'/></div>";
+	$database_str .= "  <div><input type='submit' name='Submit' value='submit' ></div>";
+	$database_str .= "</form>";
+	return $database_str;
+}
+
+/**
+ * Functions to submit the database which we entered.
+ */
+function enter_database_submit() {
+  if (!file_exists('config/config.php')) {
+    echo enter_database_form();
+    if (isset($_POST['Submit'])) {
+      initialise_storage($_POST['dbname'],$_POST['dbusername'],$_POST['db_password']);  
+    }
+  }
+  else {
+    echo "you are already installed";
+  }  
+}
+
+/**
+ * Functions to submit the database which we entered.
+ */
+function config($db_name,$username,$password) {
+   $file = fopen('config/config.php','w+');
+   if ($file == false) {
+     $entry = "";
+     $entry .= "<?php";
+     $entry .= "$db_name";
+     $entry .= "$username";
+     $entry .= "$password";
+     $entry .= "?>";
+   }
+}

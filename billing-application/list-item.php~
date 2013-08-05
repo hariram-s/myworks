@@ -1,0 +1,27 @@
+<?php
+require_once 'bootstrap.php';
+require_once 'includes/common.inc';
+require_once 'includes/stock-management-lib.inc';
+$header = array ('Mark', 'Item Code' , 'Item name', 'Selling price', 'Current Stock','Enabled/disabled', 'Actions');
+$list_user = new Savant3();
+$list_user->title = 'List item';
+$list_user->links = get_menu();
+$list = list_items();
+foreach ($list as $index => $item)  {
+  $link = "<a href='edit-item.php?q={$item['code']}'>Edit</a>";
+  $list[$index][] = $link;
+  $check_box = "<input name=\"codes[{$item['code']}]\" type='checkbox' value='1'/>";
+  array_unshift($list[$index],$check_box);
+  if ($list[$index]['status'] == 1) {
+    $list[$index]['status'] = 'Enabled';
+  }
+  else {
+    $list[$index]['status'] = 'Disabled';
+  }
+}
+$rows = $list;
+$list_user->inputs = list_item_form($header,$rows); 
+$list_user->display('templates/content.tpl.php');
+include 'footer.php';
+?>
+

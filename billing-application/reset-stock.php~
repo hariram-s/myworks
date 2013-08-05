@@ -1,0 +1,15 @@
+<?php 
+require_once 'bootstrap.php';
+require_once 'includes/common.inc';
+require_once 'includes/stock-management-lib.inc';
+$codes = array();
+if(isset($_POST['codes'])) { 
+  foreach( $_POST['codes'] as $index => $code) {
+    $codes[] = "$index";
+  }
+}
+if($_POST['submit']=='Reset') {
+  disable_items($codes);
+  redirect('list-stock.php');
+}
+?>

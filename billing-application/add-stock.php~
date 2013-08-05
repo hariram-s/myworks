@@ -1,0 +1,26 @@
+<?php
+require_once 'bootstrap.php';
+require_once 'includes/common.inc';
+require_once 'includes/stock-management-lib.inc';
+$previous = curPageName();
+if (authorize('add_stock')) {
+  $date_str =time();
+  $date = date('Y-m-d',$date_str);
+  $add_stock = new Savant3();
+  $add_stock->title = 'Add stock';
+  $add_stock->main_links = get_menu('main_menu');
+  $add_stock->links = get_menu('stocks');
+  $add_stock->inputs = add_stock_form($date);  
+  $add_stock->display('templates/content.tpl.php');
+  if (add_stock_submit() == 'list-item') {
+    echo "Your stock is added now";
+  }
+  elseif (add_stock_submit() == 'error') {
+    echo "Item code doesnt exists";
+  }
+}
+else {
+  redirect ("login.php?destination=$previous");
+}
+?>
+

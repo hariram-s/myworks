@@ -1,0 +1,30 @@
+<?php
+require_once 'bootstrap.php';
+require_once 'includes/common.inc';
+require_once 'includes/bill-management-lib.inc';
+$previous = curPageName(); 
+if (authorize('add_customer')) {
+  $date_str =time();
+  $date = date('Y-m-d',$date_str);
+  $add_customer = new Savant3();
+  $add_customer->title = 'Add customer';
+  $add_customer->main_links = get_menu('main_menu');
+  $add_customer->links = get_menu('billing');
+  $add_customer->inputs = addcustomer_form($date);  
+  $add_customer->display('templates/content.tpl.php');
+  if(isset ($_POST['addcustomer'])) {
+    if (!empty($_POST['name']) 
+      && !empty($_POST['date'])
+    ) {
+      echo add_customer_submit() ;
+    }
+    else {
+      echo "please fill the required fields";
+    }
+  }
+}
+else {
+  redirect ('access-denied.php');
+}
+?>
+

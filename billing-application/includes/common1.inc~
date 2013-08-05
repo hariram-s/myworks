@@ -1,0 +1,63 @@
+<?php 
+/**
+ * Common functions for Billing application
+ *
+ * The functions which we used in all  files are said to common functions
+ *
+ */
+
+/**
+ * Redirection function
+ *
+ * it is used as common for all redirection files
+ * now we can move our files anywhere
+ * 
+ */ 
+function redirect ($location) {
+  $host = $_SERVER['HTTP_HOST'];
+  $uri = rtrim (dirname($_SERVER['PHP_SELF']),'/');
+  header("Location: http://$host$uri/$location");
+  exit();
+}
+
+/**
+ * Connect to the database
+ */
+function initialize_db_connection($dbname, $username, $password) {
+  try {
+    $db = new PDO('mysql:host=localhost;dbname='.$dbname, $username, $password);
+    return 1;
+  } catch(PDOException $ex) {
+      return "An Error occured! " . $ex->getMessage();
+  }
+}
+
+/**
+ * Function to gets the connection object
+ * 
+ * @return object $db
+ */
+function db_get_connection($dbname='', $username='', $password='') {
+  static $db;
+  $path = getcwd();
+  if (file_exists($path . '/config/config.php')) {
+    include 'config/config.php';
+  }
+  if (empty($dbname)) {
+    $dbname = $db_name;
+    $username = $db_username;
+    $password = $db_password;
+  }
+  try {
+    if (!isset($db)) {
+      $db = new PDO('mysql:host=localhost;dbname='.$dbname, $username, $password);
+      $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }
+  } catch (PDOException $ex) {
+      return "An Error occured! " . $ex->getMessage();
+  }
+  return $db;
+}
+
+?>
+

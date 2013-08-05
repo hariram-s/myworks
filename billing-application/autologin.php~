@@ -1,0 +1,15 @@
+<?php
+if(isset($_COOKIE[$cookie_name]))
+  {
+  $db = db_get_connection();
+  $stmt = $db->prepare("SELECT user_id "
+    . " FROM session "
+    . " WHERE(sess_id = :sess_id)"
+   );
+   $stmt->execute(array(':sess_id' => $sess_id));
+  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  $row_count = $stmt->rowCount();
+  if ($row_count > 0) {
+	  $_SESSION['userid'] = $row['user_id'];
+  }
+}

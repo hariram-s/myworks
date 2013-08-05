@@ -1,0 +1,20 @@
+<?php
+require_once 'bootstrap.php';
+require_once 'includes/common.inc';
+require_once 'includes/bill-management-lib.inc';
+$header = array ('Mark','Card number','Name' , 'Date');
+$list = list_customers();
+$list_customer = new Savant3();
+$list_customer->title = 'List customer';
+$list_customer->links = get_menu();
+$list_customer->header = $header; 
+  foreach ($list as $index => $entry)  {
+    $check_box = "<input name=\"names[{$entry['name']}]\" type='checkbox' value='1'/>";
+    array_unshift($list[$index],$check_box);
+  }
+$rows = $list;
+$list_customer->inputs = list_customer_form($header,$rows);
+$list_customer->display('templates/content.tpl.php');
+include 'footer.php';
+?>
+
